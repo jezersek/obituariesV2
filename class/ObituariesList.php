@@ -28,13 +28,13 @@ class ObituariesList{
 	public function __construct(){
 		$connect = new DB_connect();
 		$connect->set_charset("utf8");
-		$query = "SELECT id, name, lastname, location, dateOfDeath FROM obituaries ORDER BY datePublished DESC";
+		$query = "SELECT id, name, lastname, location, dateOfBirth, dateOfDeath, religion FROM obituaries ORDER BY datePublished DESC";
 		$statment = $connect->prepare($query);
 		$statment -> execute();
-		$statment->bind_result($id_obituary,$name, $lastname, $location, $dateOfDeath);
+		$statment->bind_result($id_obituary,$name, $lastname, $location, $dateOfBirth, $dateOfDeath,  $religion);
 	
 		while ($statment->fetch()) {
-			$this->addObituary(new Obituary($id_obituary,$name, $lastname, $location, $dateOfDeath));
+			$this->addObituary(new Obituary($id_obituary,$name, $lastname, $location, $dateOfBirth, $dateOfDeath, $religion));
 		}
 		$statment -> close();
 		$connect->close();

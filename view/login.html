@@ -6,11 +6,12 @@
 </head>
 
 <body>
-<h2>User login</h2>
+
 <form method="post" accept-charset="utf8" >
-	Email address: <input type="text" name="email" maxlength="30" pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" oninvalid="this.setCustomValidity('Please enter valid email address')"
+	<h2>User login</h2>
+	Email address: <br /><input type="text" name="email" maxlength="30" pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" oninvalid="this.setCustomValidity('Please enter valid email address')"
 		oninput="setCustomValidity('')" required><br />
-	Password: <input type="password" name="pass" required><br />
+	Password: <br /><input type="password" name="pass" required><br />
 	<input type="submit" name="login" value="Login">
 </form>
 </body>

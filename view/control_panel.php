@@ -1,3 +1,12 @@
+<script>
+$(document).ready(function() {
+	$('#id_update').change(function() {
+    selectedOption = $('option:selected', this);
+    $('input[name=address]').val(selectedOption.data('address') );
+    $('input[name=phone]').val(selectedOption.data('phone') );
+    $('input[name=email]').val(selectedOption.data('email') );
+})});
+</script>
 <?php
 if(!defined('__ROOT__')){
 	define('__ROOT__', dirname(dirname(__FILE__)));
@@ -20,10 +29,10 @@ $email = $user->getMail();
 
 if(isset($_POST['update'])) {
 	$newId = $_POST['id_update'];
-	$newAddress = mysql_real_escape_string($_POST['address']);
-	$newPhone = mysql_real_escape_string($_POST['phone']);
-	$newEmail = mysql_real_escape_string($_POST['email']);
-	$newPass = mysql_real_escape_string($_POST['pass']);
+	$newAddress = $_POST['address'];
+	$newPhone = $_POST['phone'];
+	$newEmail = $_POST['email'];
+	$newPass = $_POST['pass'];
 	
 	if($newPass != '') {
 		$newPass = md5($newPass);
@@ -37,17 +46,12 @@ if(isset($_POST['update'])) {
 }
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-</head>
-
 <body>
-<h1>Control panel</h1>
-Here you can change your account settings.
+
 
 <form method="post" accept-charset="utf8" >
-	Name: 
+	<h2>Control panel</h2>
+	Name:  <br />
 	<?php 
 	if ($_SESSION['rank'] == 2) {
 		$listOfUsers = new UsersList();
@@ -55,9 +59,13 @@ Here you can change your account settings.
 		$usersArray = $listOfUsers -> getUsersList();
 		$length = count($usersArray);
 		
-		echo "<select name='id_update'>";
+		echo "<select name='id_update' id='id_update'>";
+		echo "<option value=''>Please Select</option>";
 		for($i=0; $i<$length; $i++) {
-			echo "<option value='".$usersArray[$i]->getId()."'>".$usersArray[$i]->getName()." ".$usersArray[$i]->getLastName()."</option>";
+			echo "<option value='".$usersArray[$i]->getId()."' data-address='".$usersArray[$i]->getAddress()."' 
+			data-phone='".$usersArray[$i]->getPhone()."' data-email='".$usersArray[$i]->getMail()."'>"
+			.$usersArray[$i]->getName()." ".$usersArray[$i]->getLastName()."</option>";
+			
 		}
 		echo "</select><br />";
 	}
@@ -68,13 +76,13 @@ Here you can change your account settings.
 	?>
 	
 	
-	Address: <input type="text" name="address" maxlength="50" pattern="[a-zA-Z0-9 ]+" oninvalid="this.setCustomValidity('Please enter valid address')"
-		oninput="setCustomValidity('')" value="<?php echo $address ?>" required><br />
-	Phone number: <input type="text" name="phone" maxlength="15" pattern="[0-9+]{6,15}" oninvalid="this.setCustomValidity('Please enter valid phone number')"
-		oninput="setCustomValidity('')" value="<?php echo $phone ?>" required><br />
-	Email address<input type="text" name="email" maxlength="30" pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" oninvalid="this.setCustomValidity('Please enter valid email address')"
-		oninput="setCustomValidity('')" value="<?php echo $email ?>" required><br />
-	Password: <input type="password" name="pass"><br />
+	Address:  <br /><input type="text" name="address" maxlength="50" pattern="[a-zA-Z0-9 ]+" oninvalid="this.setCustomValidity('Please enter valid address')"
+		oninput="setCustomValidity('')" value="<?php echo $address; ?>" required><br />
+	Phone number:  <br /><input type="text" name="phone" maxlength="15" pattern="[0-9+]{6,15}" oninvalid="this.setCustomValidity('Please enter valid phone number')"
+		oninput="setCustomValidity('')" value="<?php echo $phone; ?>" required><br />
+	Email address:  <br /><input type="text" name="email" maxlength="30" pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" oninvalid="this.setCustomValidity('Please enter valid email address')"
+		oninput="setCustomValidity('')" value="<?php echo $email; ?>" required><br />
+	Password:  <br /><input type="password" name="pass"><br />
 	<input type="submit" name="update" value="Update!">
 </form>
 </body>

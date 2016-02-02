@@ -30,11 +30,20 @@ class Obituary{
 		$this -> music = $music;
 		$this -> datePublished = date("Y-m-d");
 	}
-	// skopiraj sliko v mapo, vpiši ime v bazo, 
+
 	public function create(){
 		$connect= new DB_connect();
 		$connect-> set_charset("utf8");
 
+		$firstname = $connect->real_escape_string(trim($this->name));
+		$lastname = $connect->real_escape_string(trim($this->lastname));
+		$dateOfBirth = $connect->real_escape_string(trim($this->dateOfBirth));
+		$dateOfDeath = $connect->real_escape_string(trim($this->dateOfDeath));
+		$religion = $connect->real_escape_string(trim($this->religion));
+		$location = $connect->real_escape_string(trim($this->location));
+		$text = $connect->real_escape_string(trim($this->text));
+		$url = $connect->real_escape_string(trim($this->music));	
+		
 		if(!empty($_FILES["photo"]["name"])) {
 			if(($_FILES['photo']['size'] < 1024000 ) && getimagesize($_FILES['photo']['tmp_name'])) {
 				$directory_self = str_replace(basename($_SERVER['PHP_SELF']), '', $_SERVER['PHP_SELF']); 
@@ -53,7 +62,6 @@ class Obituary{
 		$statment->bind_param('ssssssssss',$this -> name, $this -> lastname, $this -> dateOfBirth, $this -> dateOfDeath, 
 			$this -> religion, $this -> location, $this -> text, $this -> image, $this -> music, $this -> datePublished);
 		$statment -> execute();
-		//$this -> obituaryId = $connect-> insert_id; 
 		$statment -> close();
 		$connect->close();
 	}

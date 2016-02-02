@@ -27,11 +27,18 @@ class Controller
 			}
 		}
 		
-		if(!isset($_GET["obituaryid"])){ 			
-			include_once "view/all_obituaries.php";
-		} 
-		else {										
-			include_once "view/one_obituary.php";				
+		if(!isset($_GET['action'])) {
+			if(!isset($_GET["obituaryid"])){ 			
+				include_once "view/all_obituaries.php";
+			} 
+			else {										
+				include_once "view/one_obituary.php";	
+			}
+		}
+		else{
+			if($_GET['action'] == 'about') {
+				include_once "view/about.php";
+			}
 		}
 	}
 }

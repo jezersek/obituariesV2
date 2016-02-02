@@ -1,11 +1,20 @@
-<h1><b>Obituaries</b></h1>
 <?php
-	
+	echo "<header>";
 	if(isset($_SESSION['logged']) && $_SESSION['logged'] == true) {
-		echo '<p>Welcome! <a href="?logout=yes">Logout!</a></p><a href="?action=addobituary">Add obituary</a> <a href=?action=control>Control panel</a>';
+		echo '<p>Welcome '. $_SESSION['name'] . '! <a href="?logout=yes">Logout!</a>';
 	}
-	else if (!isset($_GET['action'])){
+	else {
 		echo 'Please <a href=?action=login>login</a> or <a href=?action=signup>signup</a>.';
 	}
-	if(isset($_GET['obituaryid'])) echo " <a href=index.php>Home</a>"; 
+	echo "<h1>Obituaries</h1>";
+	echo "<div class=meni>";
+	echo " <a href=index.php>Home</a>"; 
+	if(isset($_SESSION['logged']) && $_SESSION['logged'] == true) {
+		echo '<a class=meni href="?action=addobituary">Add obituary</a> <a class=meni href=?action=control>Control panel</a>';
+	}
+	echo " <a class=meni href=index.php?action=about>About</a>"; 
+	echo "</div>";
+	echo "</header>";
 ?>
+
+

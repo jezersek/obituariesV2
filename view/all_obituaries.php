@@ -5,27 +5,34 @@
 	
 	if(!isset($_SESSION)) session_start();
 ?>
-<html>
-<head>
-	<meta charset="utf-8" />
-	<title>All published obituaries</title>
-	<!-- <link rel="stylesheet" type="text/css" href="css/topics_list.css" />	 -->
-</head>
-<body>
-	<?php 
-	require_once(__ROOT__.'/class/ObituariesList.php');
-	$listOfObituaries = new ObituariesList();
-	
-	$array = $listOfObituaries -> getObituariesList();
 
-	echo "<h2>Published obituaries ...</h2>";
-	$length = count($array);
-	for($i =0; $i<$length; $i++){
-		echo "<p>";
-		echo $array[$i] -> getObituaryName() . " " . $array[$i] -> getObituaryLastName();
-		echo ' <a href="?obituaryid='.$array[$i]->getId().'">Read More</a>';
-		echo "</p>";
+<body>
+<h2>Published obituaries ...</h2>
+<div class="container" id="obituaries"></div>
+<button id="more">Show more ...</button>
+<script>
+$(document).ready(function() {
+	var currentNumber = 0;
+	printObituaries(0, 9);
+	
+	function printObituaries(start, limit)
+	{
+		$.post("ajax.php", {start: start, limit: limit}, function(data) {
+			console.log(data)
+			data = $.parseJSON(data)
+			if(data.length < 9) {
+				$('#more').hide();
+			}
+			$.each(data, function(key, obituary) {
+				$('#obituaries').append('<a class="list" href="?obituaryid='+obituary.id+'"><b>'+obituary.name+' '+obituary.lastname+'</b><br /><i>'+obituary.dateOfBirth+' - '+obituary.dateOfDeath+'</i><br /><img src="images/'+obituary.religion+'.png" height=100/><br /></a>')
+				currentNumber = currentNumber+1
+				console.log(currentNumber)
+			})
+		})
 	}
-	?>
-	</body>
-</html>
+	$('#more').click(function() {
+		printObituaries(currentNumber,9)
+	})
+})
+</script>
+</body>

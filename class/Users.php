@@ -28,11 +28,17 @@ class Users{
 	public function signup() {
 		$connect= new DB_connect();
 		$connect-> set_charset("utf8");
+		$name = $connect->real_escape_string(trim($this->name));
+		$lastname = $connect->real_escape_string(trim($this->lastname));
+		$phone = $connect->real_escape_string(trim($this->phone));
+		$address = $connect->real_escape_string(trim($this->address));
+		$email = $connect->real_escape_string(trim($this->email));
+		$pass = md5($connect->real_escape_string(trim($this->pass)));
 		
 		$query = "INSERT INTO users(name, lastname, address, phone, email, password) VALUES(?,?,?,?,?,?)";
 
 		$statment = $connect-> prepare($query);
-		$statment->bind_param('ssssss',$this -> name, $this -> lastname, $this -> address, $this -> phone, $this -> email, $this -> pass);
+		$statment->bind_param('ssssss',$name, $lastname, $address, $phone, $pass);
 		$statment -> execute();
 		$statment -> close();
 		$connect->close();
@@ -56,15 +62,19 @@ class Users{
 	public function update() {
 		$connect= new DB_connect();
 		$connect-> set_charset("utf8");
-
+		
+		$address = $connect->real_escape_string(trim($this->address));
+		$phone = $connect->real_escape_string(trim($this->phone));
+		$email = $connect->real_escape_string(trim($this->email));
+		
 		if($this->pass == '') {
 			$query = "UPDATE users SET address=?, phone=?, email=? WHERE id=?";
 			$statment = $connect -> prepare($query); 
-			$statment -> bind_param('sssi', $this->address, $this->phone, $this->email, $this->id);
+			$statment -> bind_param('sssi',$address, $phone, $email, $this->id);
 		} else {
 			$query = "UPDATE users SET address=?, phone=?, email=?, password=? WHERE id=?";
 			$statment = $connect -> prepare($query); 
-			$statment -> bind_param('ssssi', $this->address, $this->phone, $this->email, $this->pass, $this->id);
+			$statment -> bind_param('ssssi', $address, $phone, $email, $this->pass, $this->id);
 		}
 		$statment -> execute();
 		$statment -> close();

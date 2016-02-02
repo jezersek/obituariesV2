@@ -6,45 +6,38 @@ if(!defined('__ROOT__')){
 if(!isset($_SESSION)) session_start();
 
 if(isset($_POST['register'])) {
-	$firstname = mysql_real_escape_string($_POST['firstname']);
-	$lastname = mysql_real_escape_string($_POST['lastname']);
-	$address = mysql_real_escape_string($_POST['address']);
-	$phone = mysql_real_escape_string($_POST['phone']);
-	$email = mysql_real_escape_string($_POST['email']);
-	$pass = md5(mysql_real_escape_string($_POST['pass']));
+	$firstname = $_POST['firstname'];
+	$lastname = $_POST['lastname'];
+	$address = $_POST['address'];
+	$phone = $_POST['phone'];
+	$email = $_POST['email'];
+	$pass = $_POST['pass'];
 	
 	require_once(__ROOT__.'/class/Users.php');
 		
 	$newUser = new Users(null, $firstname, $lastname, $address, $phone, $email, $pass);
 	$newUser -> signup();
 	
-	header("Refresh: 2; url=index.php");
-	echo "Registration was successful!";
+	echo '<script type="text/JavaScript">alert("Registration was successful!");</script>';
+	header("Location: index.php");
 	
 }
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf8">
-<title>User registration form</title>
-</head>
-
 <body>
-<h1>User registration</h1>
-<form method="post" accept-charset="utf8" >
-	First name: <input type="text" name="firstname" maxlength="25" pattern="[a-zA-Z ]+" oninvalid="this.setCustomValidity('Please enter valid first name')"
+<form class="register" method="post" accept-charset="utf8" >
+	<h2>User registration</h2>
+	First name: <br /><input type="text" name="firstname" maxlength="25" pattern="[a-zA-Z ]+" oninvalid="this.setCustomValidity('Please enter valid first name')"
 		oninput="setCustomValidity('')" required><br />
-	Last name: <input type="text" name="lastname" maxlength="35" pattern="[a-zA-Z ]+" oninvalid="this.setCustomValidity('Please enter valid last name')"
+	Last name: <br /><input type="text" name="lastname" maxlength="35" pattern="[a-zA-Z ]+" oninvalid="this.setCustomValidity('Please enter valid last name')"
 		oninput="setCustomValidity('')" required><br />
-	Address: <input type="text" name="address" maxlength="50" pattern="[a-zA-Z0-9 ]+" oninvalid="this.setCustomValidity('Please enter valid address')"
+	Address: <br /><input type="text" name="address" maxlength="50" pattern="[a-zA-Z0-9 ]+" oninvalid="this.setCustomValidity('Please enter valid address')"
 		oninput="setCustomValidity('')" required><br />
-	Phone number: <input type="text" name="phone" maxlength="15" pattern="[0-9+]{6,15}" oninvalid="this.setCustomValidity('Please enter valid phone number')"
+	Phone number: <br /><input type="text" name="phone" maxlength="15" pattern="[0-9+]{6,15}" oninvalid="this.setCustomValidity('Please enter valid phone number')"
 		oninput="setCustomValidity('')" required><br />
-	Email address<input type="text" name="email" maxlength="30" pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" oninvalid="this.setCustomValidity('Please enter valid email address')"
+	Email address: <br /><input type="text" name="email" maxlength="30" pattern="^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$" oninvalid="this.setCustomValidity('Please enter valid email address')"
 		oninput="setCustomValidity('')" required><br />
-	Password: <input type="password" name="pass" required><br />
+	Password: <br /><input type="password" name="pass" required><br />
 	<input type="submit" name="register" value="Register">
 </form>
 </body>

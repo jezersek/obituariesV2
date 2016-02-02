@@ -1,6 +1,5 @@
 <?php 
 if(!isset($_SESSION)) session_start();
-header("Refresh: 2; url=index.php");
 
 if(isset($_POST['login']))
 {
@@ -12,26 +11,25 @@ if(isset($_POST['login']))
 	$email = $connect->real_escape_string(trim($_POST["email"]));
 	$pass = md5($connect->real_escape_string(trim($_POST["pass"])));
 	
-	$query = "SELECT id, password, rank FROM users WHERE email=?";
+	$query = "SELECT id, name, lastname, password, rank FROM users WHERE email=?";
 	$statement = $connect->prepare($query);
 	$statement->bind_param('s', $email);
 	$statement->execute();
-	$statement->bind_result($id_user, $passwd, $rank);
+	$statement->bind_result($id_user,$name, $lastname, $passwd, $rank);
 	$statement->fetch();
 	$statement->close();
 	$connect->close();
 	
 	if($pass == $passwd)
 	{
+		$_SESSION['name'] = $name . " " .$lastname;
 		$_SESSION['email'] = $email;
 		$_SESSION['id_user'] = $id_user;
 		$_SESSION['rank'] = $rank;
 		$_SESSION['logged'] = true;
-		
-		echo 'Welcome '.$_SESSION['email'];
-		
+		header("Location: index.php");
 	}
-	else echo 'Username and password do not match!';
+	else echo '<p>Username and password do not match!</p>';
 }
 
 ?>
